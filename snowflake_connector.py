@@ -51,7 +51,7 @@ def snowflake_lookup(
 # role = "REPORTING"
 # schema = "PUBLIC"
 # database_name = "IDSDEV"
-# file_path = "pcc_query.txt"
+# file_path = "pcc_query_PO.txt"
 
 
 # df = snowflake_lookup(
