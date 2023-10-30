@@ -2,6 +2,7 @@ import snowflake.connector
 import pandas as pd
 from snowflake.connector import DictCursor
 import time
+from datetime import datetime
 
 
 def snowflake_lookup(
@@ -32,8 +33,8 @@ def snowflake_lookup(
 
     with open(file_path, "r") as file:
         query = file.read()
-        print("SQL Query:")
-        print(query)
+        #print("SQL Query:")
+        #print(query)
 
     cursor.execute(query)
 
@@ -44,6 +45,13 @@ def snowflake_lookup(
 
     dataframe = pd.DataFrame(final_dados)
 
+    if len(dataframe) > 0:
+        print(dataframe)
+        timestamp=datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        dataframe.to_excel(f'outputs/PO_report_{timestamp}.xlsx',index=False)
+    else: 
+        print("There are no records for especified range")
+
     end_time = time.time()  # Record the end time
     elapsed_time = end_time - start_time  # Calculate elapsed time in seconds
     print(f"Elapsed Time: {elapsed_time} seconds")
@@ -51,25 +59,24 @@ def snowflake_lookup(
     return dataframe
 
 
-account = "technipfmc-data"
-warehouse = "reporting_wh"
-user = "maria.mourao@technipfmc.com"
-authenticator = "externalbrowser"
-role = "REPORTING"
-schema = "PUBLIC"
-database_name = "IDSDEV"
-file_path = "pcc_query_PO.txt"
+# account = "technipfmc-data"
+# warehouse = "reporting_wh"
+# user = "maria.mourao@technipfmc.com"
+# authenticator = "externalbrowser"
+# role = "REPORTING"
+# schema = "PUBLIC"
+# database_name = "IDSDEV"
+# file_path = "pcc_query_PO.txt"
 
 
-df = snowflake_lookup(
-    account,
-    warehouse,
-    user,
-    authenticator,
-    role,
-    schema,
-    database_name,
-    file_path,
-)
+# df = snowflake_lookup(
+#     account,
+#     warehouse,
+#     user,
+#     authenticator,
+#     role,
+#     schema,
+#     database_name,
+#     file_path,
+# )
 
-print(df)
