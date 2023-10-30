@@ -44,16 +44,17 @@ def snowflake_lookup(
     return dataframe
 
 
-# account = "technipfmc-data"
-# warehouse = "reporting_wh"
-# user = "pedro.franca@technipfmc.com"
-# authenticator = "externalbrowser"
-# role = "REPORTING"
-# schema = "PUBLIC"
-# database_name = "IDSDEV"
-# file_path = "pcc_query_PO.txt"
+account = "technipfmc-data"
+warehouse = "reporting_wh"
+user = "maria.mourao@technipfmc.com"
+authenticator = "externalbrowser"
+role = "REPORTING"
+schema = "PUBLIC"
+database_name = "IDSDEV"
+file_path = "pcc_query_PO.txt"
 
 
-# df = snowflake_lookup(
-#     account, warehouse, user, authenticator, role, schema, database_name, file_path
-# )
+df = snowflake_lookup(
+    account, warehouse, user, authenticator, role, schema, database_name, file_path
+)
+print(df)
