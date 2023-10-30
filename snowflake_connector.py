@@ -53,12 +53,12 @@ def snowflake_lookup(
 
 account = "technipfmc-data"
 warehouse = "reporting_wh"
-user = "pedro.franca@technipfmc.com"
+user = "maria.mourao@technipfmc.com"
 authenticator = "externalbrowser"
 role = "REPORTING"
 schema = "PUBLIC"
 database_name = "IDSDEV"
-file_path = "pcc_query.txt"
+file_path = "pcc_query_PO.txt"
 
 
 df = snowflake_lookup(
