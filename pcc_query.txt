@@ -1,0 +1,538 @@
+SELECT * from(
+SELECT DISTINCT
+
+  REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(pha.ORG_ID, '5737.0000000000', 'OU FLEXIBRAS BRASIL'), '5738.0000000000', 'OU TECHNIP BRASIL'), '7619.0000000000', 'OU TECHNIP TPAR'), '9656.0000000000', 'OU DOFCON'), '16001.0000000000', 'OU SUPORTE'), '14501.0000000000', 'OU GLOBAL') AS UNIDADE_OPERACIONAL
+,  pp.SHIP_TO_ORGANIZATION_CODE     AS PLANT
+,'BR'                               AS PLANT_COUNTRY
+,'RJ'                               AS PLANT_CITY
+,'GEOS'                             AS FONTE
+, pha.TYPE_LOOKUP_CODE              AS TIPO_PO
+, pha.segment1        	            AS PO_NUM
+, pla.line_num                      AS NUM_LINE
+, pra.release_num                   AS NUM_RELEASE
+, plla.shipment_num                 AS NUM_ENTREGA
+--, pda.distribution_num              AS NUM_DISTRIB
+, case when pha.TYPE_LOOKUP_CODE = 'BLANKET'  then pra.approved_flag   else pha.approved_flag end             AS APPROVED
+, pha.ATTRIBUTE10                   AS CARACTERISTICA
+, CASE WHEN pra.release_num IS NULL THEN REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(pha.ORG_ID, '5737.0000000000', 'OU FLEXIBRAS BRASIL'), '5738.0000000000', 'OU TECHNIP BRASIL'), '7619.0000000000', 'OU TECHNIP TPAR'), '9656.0000000000', 'OU DOFCON'), '16001.0000000000', 'OU SUPORTE'), '14501.0000000000', 'OU GLOBAL')||' - '|| TO_NUMBER(pha.segment1)  ELSE REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(pha.ORG_ID, '5737.0000000000', 'OU FLEXIBRAS BRASIL'), '5738.0000000000', 'OU TECHNIP BRASIL'), '7619.0000000000', 'OU TECHNIP TPAR'), '9656.0000000000', 'OU DOFCON'), '16001.0000000000', 'OU SUPORTE'), '14501.0000000000', 'OU GLOBAL')||' - '|| TO_NUMBER(pha.segment1) ||' - '|| TO_NUMBER(pra.release_num)     END                        AS CONCAT_HEADER
+, CASE WHEN pra.release_num IS NULL THEN REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(pha.ORG_ID, '5737.0000000000', 'OU FLEXIBRAS BRASIL'), '5738.0000000000', 'OU TECHNIP BRASIL'), '7619.0000000000', 'OU TECHNIP TPAR'), '9656.0000000000', 'OU DOFCON'), '16001.0000000000', 'OU SUPORTE'), '14501.0000000000', 'OU GLOBAL')||' - '|| TO_NUMBER(pha.segment1) ||' - '||   TO_NUMBER(pla.line_num)   ||' - '|| 	TO_NUMBER(plla.shipment_num)  ELSE REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(pha.ORG_ID, '5737.0000000000', 'OU FLEXIBRAS BRASIL'), '5738.0000000000', 'OU TECHNIP BRASIL'), '7619.0000000000', 'OU TECHNIP TPAR'), '9656.0000000000', 'OU DOFCON'), '16001.0000000000', 'OU SUPORTE'), '14501.0000000000', 'OU GLOBAL')||' - '|| TO_NUMBER(pha.segment1) ||' - '|| TO_NUMBER(pra.release_num)     ||' - '||    TO_NUMBER(pla.line_num)   ||' - '|| 	TO_NUMBER(plla.shipment_num) END                        AS CONCAT
+, aps.VENDOR_NAME                   AS VENDOR_NAME
+
+,pp.BUYER_NAME  		            AS COMPRADOR_ATUAL
+,'GEOS'                             AS TIPO_LINHA
+
+,mtl.segment1     			        AS MATERIAL
+,mtl.description     			    AS ITEM_DESCRIPTION
+,PAH_RELEASE.NOTE                   AS APROVAL_RELEASE_NOTES
+,PAH_PO.NOTE                        AS APROVAL_PO_NOTES
+,try_cast('dd'||pha.VENDOR_ID||'dd' as varchar)                     AS VENDOR_ID
+,APS.ATTRIBUTE11                    AS INDUSTRY_KEY
+--,TP.INDUSTRY_KEY_DESC               AS INDUSTRY_KEY_DESC
+--,TP.INDUSTRY_KEY_CATEG              AS INDUSTRY_KEY_CATEG
+--,TP.VENDOR_COUNTRY                  AS VENDOR_COUNTRY
+--,TP.VENDOR_CITY                     AS VENDOR_CITY
+
+,CASE
+WHEN PHA.TERMS_ID = 	10261	 THEN	58
+WHEN PHA.TERMS_ID = 	10400	 THEN	60
+WHEN PHA.TERMS_ID = 	10020	 THEN	28
+WHEN PHA.TERMS_ID = 	10021	 THEN	0
+WHEN PHA.TERMS_ID = 	10023	 THEN	15
+WHEN PHA.TERMS_ID = 	10024	 THEN	21
+WHEN PHA.TERMS_ID = 	10025	 THEN	30
+WHEN PHA.TERMS_ID = 	10027	 THEN	10
+WHEN PHA.TERMS_ID = 	10028	 THEN	0
+WHEN PHA.TERMS_ID = 	10240	 THEN	55
+WHEN PHA.TERMS_ID = 	10080	 THEN	2
+WHEN PHA.TERMS_ID = 	10081	 THEN	3
+WHEN PHA.TERMS_ID = 	10086	 THEN	9
+WHEN PHA.TERMS_ID = 	10098	 THEN	25
+WHEN PHA.TERMS_ID = 	10920	 THEN	120
+WHEN PHA.TERMS_ID = 	11301	 THEN	0
+WHEN PHA.TERMS_ID = 	10261	 THEN	58
+WHEN PHA.TERMS_ID = 	10400	 THEN	60
+WHEN PHA.TERMS_ID = 	10020	 THEN	28
+WHEN PHA.TERMS_ID = 	10021	 THEN	0
+WHEN PHA.TERMS_ID = 	10023	 THEN	15
+WHEN PHA.TERMS_ID = 	10024	 THEN	21
+WHEN PHA.TERMS_ID = 	10025	 THEN	30
+WHEN PHA.TERMS_ID = 	10027	 THEN	10
+WHEN PHA.TERMS_ID = 	10028	 THEN	0
+WHEN PHA.TERMS_ID = 	10240	 THEN	55
+WHEN PHA.TERMS_ID = 	10080	 THEN	2
+WHEN PHA.TERMS_ID = 	10081	 THEN	3
+WHEN PHA.TERMS_ID = 	10061	 THEN	35
+WHEN PHA.TERMS_ID = 	10083	 THEN	6
+WHEN PHA.TERMS_ID = 	10088	 THEN	12
+WHEN PHA.TERMS_ID = 	10086	 THEN	9
+WHEN PHA.TERMS_ID = 	10098	 THEN	25
+WHEN PHA.TERMS_ID = 	10920	 THEN	120
+WHEN PHA.TERMS_ID = 	11301	 THEN	0
+WHEN PHA.TERMS_ID = 	10061	 THEN	35
+WHEN PHA.TERMS_ID = 	10083	 THEN	6
+WHEN PHA.TERMS_ID = 	10088	 THEN	12
+WHEN PHA.TERMS_ID = 	12720	 THEN	0
+WHEN PHA.TERMS_ID = 	12720	 THEN	0
+WHEN PHA.TERMS_ID = 	12740	 THEN	3
+WHEN PHA.TERMS_ID = 	12740	 THEN	0
+WHEN PHA.TERMS_ID = 	12741	 THEN	5
+WHEN PHA.TERMS_ID = 	12741	 THEN	5
+WHEN PHA.TERMS_ID = 	12742	 THEN	7
+WHEN PHA.TERMS_ID = 	12742	 THEN	7
+WHEN PHA.TERMS_ID = 	12743	 THEN	10
+WHEN PHA.TERMS_ID = 	12743	 THEN	10
+WHEN PHA.TERMS_ID = 	12744	 THEN	15
+WHEN PHA.TERMS_ID = 	12744	 THEN	15
+WHEN PHA.TERMS_ID = 	12745	 THEN	20
+WHEN PHA.TERMS_ID = 	12745	 THEN	20
+WHEN PHA.TERMS_ID = 	12746	 THEN	28
+WHEN PHA.TERMS_ID = 	12746	 THEN	28
+WHEN PHA.TERMS_ID = 	12747	 THEN	30
+WHEN PHA.TERMS_ID = 	12747	 THEN	30
+WHEN PHA.TERMS_ID = 	12748	 THEN	45
+WHEN PHA.TERMS_ID = 	12748	 THEN	45
+WHEN PHA.TERMS_ID = 	12749	 THEN	60
+WHEN PHA.TERMS_ID = 	12749	 THEN	60
+WHEN PHA.TERMS_ID = 	12760	 THEN	90
+WHEN PHA.TERMS_ID = 	12760	 THEN	90
+WHEN PHA.TERMS_ID = 	12761	 THEN	14
+WHEN PHA.TERMS_ID = 	12761	 THEN	14
+WHEN PHA.TERMS_ID = 	12780	 THEN	25
+WHEN PHA.TERMS_ID = 	12780	 THEN	25
+WHEN PHA.TERMS_ID = 	12920	 THEN	90
+WHEN PHA.TERMS_ID = 	12920	 THEN	90
+WHEN PHA.TERMS_ID = 	12921	 THEN	90
+WHEN PHA.TERMS_ID = 	12921	 THEN	90
+WHEN PHA.TERMS_ID = 	12940	 THEN	75
+WHEN PHA.TERMS_ID = 	12940	 THEN	75
+WHEN PHA.TERMS_ID = 	12900	 THEN	0
+WHEN PHA.TERMS_ID = 	12900	 THEN	0
+WHEN PHA.TERMS_ID = 	12860	 THEN	45
+WHEN PHA.TERMS_ID = 	12860	 THEN	45
+WHEN PHA.TERMS_ID = 	12861	 THEN	45
+WHEN PHA.TERMS_ID = 	12861	 THEN	45
+WHEN PHA.TERMS_ID = 	12880	 THEN	40
+WHEN PHA.TERMS_ID = 	12880	 THEN	40
+WHEN PHA.TERMS_ID = 	12980	 THEN	30
+WHEN PHA.TERMS_ID = 	12980	 THEN	30
+WHEN PHA.TERMS_ID = 	12981	 THEN	45
+WHEN PHA.TERMS_ID = 	12981	 THEN	45
+WHEN PHA.TERMS_ID = 	12982	 THEN	60
+WHEN PHA.TERMS_ID = 	12982	 THEN	60
+WHEN PHA.TERMS_ID = 	12850	 THEN	150
+WHEN PHA.TERMS_ID = 	12850	 THEN	150
+WHEN PHA.TERMS_ID = 	12960	 THEN	30
+WHEN PHA.TERMS_ID = 	12960	 THEN	30
+ELSE PHA.TERMS_ID	          END	        AS TERMS_NUM
+,'TERMS ID -'||PHA.TERMS_ID AS TERMS_DESCR
+
+, pla.CREATION_DATE  DATA_CRIACAO_LINHA
+, pha.CREATION_DATE  DATA_CRIACAO_PO
+, plla.creation_date DATA_CRIACAO_ENTREGA
+, pla.ATTRIBUTE7	 PRAZO_ENTREGA_LINHA
+
+
+
+
+
+,plla.APPROVED_DATE	 APPROVED_DATE
+,plLa.promised_date   DATA_PROMESSA_ENTREGA_FORN
+
+, pla.UNIT_MEAS_LOOKUP_CODE     			UNIDADE_MEDIDA
+, pla.UNIT_PRICE                			PRECO_UNITARIO_PO
+, plla.QUANTITY          			QUANTIDADE_PO
+, pla.UNIT_PRICE *  plla.QUANTITY    QUANTIA
+, pha.CURRENCY_CODE             			MOEDA
+,CASE WHEN pha.CURRENCY_CODE = 'BRL' THEN 'LOCAL' ELSE 'INTERNACIONAL' END AS ORIGEM
+
+,CASE WHEN PHA.TYPE_LOOKUP_CODE = 'STANDARD' AND PHA.closed_code IN ('CLOSED','FINALLY CLOSED') OR PRA.closed_code IN ('CLOSED','FINALLY CLOSED') OR PLA.closed_code IN    ('CLOSED','FINALLY CLOSED') OR PLLA.closed_code IN ('CLOSED','FINALLY CLOSED')     THEN 'CLOSED'
+      WHEN PHA.TYPE_LOOKUP_CODE <> 'STANDARD' AND   PRA.closed_code IN ('CLOSED','FINALLY CLOSED')  OR PLLA.closed_code IN ('CLOSED','FINALLY CLOSED')                THEN 'CLOSED'
+      ELSE 'OPEN'
+               END AS STATUS
+--
+, pmd.PRCCOMPTYPE               			TIPO_SAVING
+, pmd.REFPRICE                  			PRECO_COMPARACAO
+, pmd.REFPRICECURR              			MOEDA_COMPARACAO
+, pmd.REFINFO                   			INF_DO_SAVING
+
+----
+,pp.PROJETO_2                   AS PROJETO_2
+
+,pp.GL_CONTA	                AS  GL_CONTA
+,pp.GL_PROJETO	                AS	GL_PROJETO
+,pp.GL_SEGMENTO	                AS	GL_SEGMENTO
+,pp.GL_WBS	                    AS  GL_WBS
+,pp.GL_CBS1	                    AS  GL_CBS1
+,pp.GL_CBS2	                    AS  GL_CBS2
+,pp.GL_VAGO1	                AS  GL_VAGO1
+,pp.GL_VAGO2	                AS  GL_VAGO2
+,pp.CODE_COMBINATION_ID	        AS  CODE_COMBINATION_ID
+,pp.ACCOUNT_TYPE	            AS  ACCOUNT_TYPE
+,pp.MDM_GLOBAL_PROJECT	        AS  MDM_GLOBAL_PROJECT
+
+,plla.ATTRIBUTE_CATEGORY           AS LINE_TIPO_COMPRA
+,plla.ATTRIBUTE3                   AS LINE_WBS
+,plla.ATTRIBUTE2                   AS LINE_ABS
+,plla.ATTRIBUTE4                   AS LINE_CBS2
+,plla.ATTRIBUTE5                   AS LINE_CBS1
+
+
+
+,REPLACE(plla.ATTRIBUTE5,'00000','0')	|| REPLACE(LINE_CBS2 ,'000000','0')	 || REPLACE(LINE_WBS ,'0000000','0') AS lINE_PMR
+
+,POIMP.IPI_TAX                     AS PO_IPI_TAX
+,POIMP.IPI_TAX_AMOUNT              AS PO_IPI_TAX_AMOUNT
+,POIMP.ISS_TAX                     AS PO_ISS_TAX
+,POIMP.ISS_TAX_AMOUNT              AS PO_ISS_TAX_AMOUNT
+,POIMP.ICMS_ST_TAX_AMOUNT          AS ICMS_ST_TAX_AMOUNT
+,POIMP.IPI_TAX_TOTAL_AMOUNT        AS IPI_TAX_TOTAL_AMOUNT
+,POIMP.ISS_TAX_TOTAL_AMOUNT        AS ISS_TAX_TOTAL_AMOUNT
+,POIMP.ICMS_ST_TAX_TOTAL_AMOUNT    AS ICMS_ST_TAX_TOTAL_AMOUNT
+
+
+
+,REPLACE(pp.GL_WBS ,'00000','0')	|| REPLACE(pp.GL_CBS1 ,'000000','0')	 || REPLACE(pp.GL_CBS2 ,'0000000','0') AS PMR
+
+
+, plla.QUANTITY_RECEIVED                     GR_QUANT_IN
+, plla.QUANTITY_BILLED                       INV_QUANT_IN
+, CASE WHEN plla.AMOUNT_BILLED   > (plla.QUANTITY_BILLED    * pla.unit_price) THEN plla.AMOUNT_BILLED   ELSE (plla.QUANTITY_BILLED    * pla.unit_price)  END INV_AMOUNT_CUR_PO
+, CASE WHEN plla.AMOUNT_RECEIVED > (plla.QUANTITY_RECEIVED  * pla.unit_price) THEN plla.AMOUNT_RECEIVED ELSE (plla.QUANTITY_RECEIVED  * pla.unit_price)  END  GR_AMOUNT_CUR_PO
+
+
+,aila.creation_date           GR_MAX_POST_DATE
+,aila.creation_date          INV_MAX_POST_DATE
+
+, plla.QUANTITY_RECEIVED  * pla.UNIT_PRICE                                                                                                      REALIZE_QUANTIA_CUR_PO_GR
+
+
+
+,CASE
+ WHEN PHA.TYPE_LOOKUP_CODE = 'STANDARD' AND PHA.closed_code IN ('CLOSED','FINALLY CLOSED') OR PRA.closed_code IN ('CLOSED','FINALLY CLOSED') OR PLA.closed_code IN    ('CLOSED','FINALLY CLOSED') OR PLLA.closed_code IN ('CLOSED','FINALLY CLOSED')     THEN 0
+ WHEN  PRA.closed_code IN ('CLOSED','FINALLY CLOSED')  OR PLLA.closed_code IN ('CLOSED','FINALLY CLOSED')                THEN 0
+WHEN plla.QUANTITY < plla.QUANTITY_RECEIVED THEN 0 ELSE  (( plla.QUANTITY - plla.QUANTITY_RECEIVED )* pla.UNIT_PRICE ) END  AMOUT_OPEN_PO_GR
+
+, plla.QUANTITY_BILLED  * pla.UNIT_PRICE                                                                                                      REALIZE_QUANTIA_CUR_PO_INV
+
+
+
+
+ ,CASE
+ WHEN PHA.TYPE_LOOKUP_CODE = 'STANDARD' AND PHA.closed_code IN ('CLOSED','FINALLY CLOSED') OR PRA.closed_code IN ('CLOSED','FINALLY CLOSED') OR PLA.closed_code IN    ('CLOSED','FINALLY CLOSED') OR PLLA.closed_code IN ('CLOSED','FINALLY CLOSED')     THEN 0
+ WHEN  PRA.closed_code IN ('CLOSED','FINALLY CLOSED')  OR PLLA.closed_code IN ('CLOSED','FINALLY CLOSED')                THEN 0
+ WHEN plla.QUANTITY < plla.QUANTITY_BILLED THEN 0 ELSE  (( plla.QUANTITY - plla.QUANTITY_BILLED )* pla.UNIT_PRICE ) END  AMOUT_OPEN_PO_INV
+
+
+FROM
+		  IDSPROD.rpl_geos_brazil.po_headers_all				AS pha
+JOIN      IDSPROD.rpl_geos_brazil.po_lines_all 					AS pla  ON  pla.po_header_id     = pha.po_header_id
+JOIN      IDSPROD.rpl_geos_brazil.po_line_locations_all 		AS plla ON  plla.po_header_id    = pha.po_header_id	     AND	plla.po_line_id = pla.po_line_id
+--JOIN      IDSPROD.rpl_geos_brazil.PO_DISTRIBUTIONS_ALL 		    AS pda  ON  pda.LINE_LOCATION_ID = plla.line_location_id
+
+LEFT JOIN IDSPROD.rpl_geos_brazil.po_releases_all 				AS pra  ON  pra.po_release_id    = plla.po_release_id	 AND	plla.po_release_id IS NOT NULL
+
+LEFT JOIN IDSPROD.rpl_geos_brazil.bra_po_mat_deflation_info_v	AS pmd  ON  pmd.po_header_id     = pha.po_header_id 	 AND	pmd.po_line_id = pla.po_line_id
+
+
+LEFT JOIN IDSPROD.RPL_GEOS_BRAZIL.BRA_PO_IMPOSTOS               AS POIMP ON POIMP.line_location_id =   plla.line_location_id
+
+LEFT JOIN (select distinct * from IDSPROD.rpl_geos_brazil.po_action_history as PAH where PAH.SEQUENCE_NUM = 1 and OBJECT_TYPE_CODE = 'PO'                                            )      AS PAH_PO      ON PAH_PO.OBJECT_ID      = pha.po_header_id
+
+LEFT JOIN (select distinct * from IDSPROD.rpl_geos_brazil.po_action_history as PAH where PAH.SEQUENCE_NUM = 1 AND OBJECT_TYPE_CODE = 'RELEASE' AND OBJECT_SUB_TYPE_CODE = 'BLANKET'  ) AS PAH_RELEASE ON PAH_RELEASE.OBJECT_ID     = plla.po_release_id
+
+--LEFT JOIN IDSPROD.rpl_geos_brazil.bra_po_projects               AS pp   ON  pda.PO_DISTRIBUTION_ID = pp.PO_DISTRIBUTION_ID
+
+
+
+LEFT JOIN (SELECT
+ PP.LINE_LOCATION_ID        LINE_LOCATION_ID
+,SHIP_TO_ORGANIZATION_CODE  SHIP_TO_ORGANIZATION_CODE
+,BUYER_NAME                 BUYER_NAME
+,MAX(CASE
+WHEN pp.GL_DEPARTAMENTO <> '0000' THEN pp.GL_DEPARTAMENTO
+WHEN pp.PROJETO         <> 'NA'   THEN pp.PROJETO
+WHEN pp.CAPEX           <> null   THEN pp.CAPEX
+END )                       AS PROJETO_2
+
+,MAX(pp.GL_CONTA)               	AS	GL_CONTA
+,MAX(pp.GL_PROJETO)            	    AS	GL_PROJETO
+,MAX(pp.GL_SEGMENTO)            	AS	GL_SEGMENTO
+,MAX(pp.GL_WBS)                	    AS	GL_WBS
+,MAX(pp.GL_CBS1)                 	AS	GL_CBS1
+,MAX(pp.GL_CBS2)                	AS	GL_CBS2
+,MAX(pp.GL_VAGO1)                	AS	GL_VAGO1
+,MAX(pp.GL_VAGO2)                	AS	GL_VAGO2
+,MAX(pp.CODE_COMBINATION_ID)    	AS	CODE_COMBINATION_ID
+,MAX(pp.ACCOUNT_TYPE)            	AS	ACCOUNT_TYPE
+,MAX(pp.MDM_GLOBAL_PROJECT) 	    AS	MDM_GLOBAL_PROJECT
+
+
+ FROM IDSPROD.rpl_geos_brazil.bra_po_projects AS PP-- WHERE BUYER_NAME LIKE '%HANSEL%' AND LINE_LOCATION_ID = '5868406'
+ GROUP BY
+ PP.LINE_LOCATION_ID
+,SHIP_TO_ORGANIZATION_CODE
+,BUYER_NAME                  ) AS PP ON  plla.line_location_id = pp.LINE_LOCATION_ID
+
+
+LEFT JOIN (select DISTINCT aila.PO_LINE_LOCATION_ID PO_LINE_LOCATION_ID,MAX(aila.creation_date) creation_date from IDSPROD.rpl_geos_brazil.ap_invoice_lines_all aila WHERE creation_date       > '01-jan-2018' GROUP BY PO_LINE_LOCATION_ID) AS aila ON  pLLA.LINE_LOCATION_ID = aila.PO_LINE_LOCATION_ID
+LEFT JOIN IDSPROD.RPL_GEOS_BRAZIL.AP_SUPPLIERS                   AS aps  ON  pha.VENDOR_ID          = aps.VENDOR_ID
+LEFT JOIN IDSPROD.RPL_GEOS_BRAZIL.AP_SUPPLIER_SITES_ALL          AS apss ON  aps.VENDOR_ID          = apss.VENDOR_ID
+
+ -- LEFT JOIN (SELECT DISTINCT
+ --                  CAST(TP.TP_ID AS VARCHAR)            AS TP_ID
+ --             ,MAX(TP.USAGE_TYPE                  )     AS USAGE_TYPE
+ --             ,MAX(TP.SUPPLIERS_EL_INDUSTRY_KEY_00)     AS INDUSTRY_KEY
+ --             ,MAX(IK.label)                            AS INDUSTRY_KEY_DESC
+ --             ,MAX(CT.label)                            AS INDUSTRY_KEY_CATEG
+ --             ,MAX(TP.ADDRESS_ELEMS_COUNTRY_CODE  )     AS VENDOR_COUNTRY
+ --             ,MAX(TP.CITY_NAME                   )     AS VENDOR_CITY
+ --             FROM IDSPROD.RPL_MDM.EBX_HG_THIRD_PARTY   AS TP
+ --        LEFT JOIN IDSPROD.RPL_MDM.EBX_INDUSTRY_KEY          AS IK ON TP.SUPPLIERS_EL_INDUSTRY_KEY_00 = IK.ID
+ --        LEFT JOIN IDSPROD.RPL_MDM.EBX_INDUSTRY_KEY_CATEGORY AS CT ON IK.CATEGORY_                    = CT.ID
+ --             GROUP BY  TP.TP_ID) AS TP  ON APS.ATTRIBUTE11   = TP.TP_ID
+
+
+LEFT JOIN (select DISTINCT * from IDSPROD.rpl_geos_brazil.mtl_system_items_b mtl where mtl.organization_id = 5740)	            AS          mtl  ON  mtl.inventory_item_id = pla.item_id
+
+
+
+
+
+
+WHERE
+CASE WHEN pha.type_lookup_code <> 'STANDARD' THEN pra.po_release_id IS NOT NULL ELSE pra.po_release_id IS  NULL END
+AND pha.org_id in ( 5737,5738,9656,14501)
+AND plla.creation_date       > '01-jan-2018'
+AND plla.line_location_id <> 2322121 --UNICA PO QUE POSSUI ERRO DE LOCATION DUPLICADO, ESSA CONDIÇÃO TIRA A LOCATION ERRADA E SEM VINCULO COM O AP
+AND  nvl(pha.CANCEL_FLAG,'N') <> 'Y'
+AND  nvl(pla.CANCEL_FLAG,'N') <> 'Y'
+AND  nvl(pra.CANCEL_FLAG,'N') <> 'Y'
+AND nvl(plla.CANCEL_FLAG,'N') <> 'Y'
+--AND PHA.SEGMENT1 = '439821'
+
+
+
+UNION ALL
+
+SELECT
+
+
+ EKKO.BUKRS	UNIDADE_OPERACIONAL
+,EKPO.WERKS	PLANT
+,'BR'                           PLANT_COUNTRY
+,'RJ'                           PLANT_CITY
+,'SAP'                          FONTE
+
+
+,DECODE(EKKO.BSART, 'NB','STANDARD', 'ZNB1','INTERCOMPANY',  '') TIPO_PO
+,TRY_CAST(EKPO.EBELN AS VARCHAR)PO_NUM
+,TRY_CAST(EKPO.EBELP AS int)	NUM_LINE
+,0							    NUM_RELEASE
+,0							    NUM_ENTREGA
+--,0							    NUM_DISTRIB
+,'Y'                            APPROVED
+,'SAP'							CARACTERISTICA
+,TRY_CAST(EKPO.EBELN AS VARCHAR)    CONCAT_HEADER
+,TRY_CAST(EKPO.EBELN AS VARCHAR) ||' - '|| TRY_CAST(EKPO.EBELP AS int) CONCAT
+,LFA1.NAME1                     VENDOR_NAME
+,EKKO.EKGRP 					COMPRADOR_ATUAL
+,CASE
+WHEN PSTYP = '0'	THEN 'STANDARD'
+WHEN PSTYP = '3'	THEN 'SUBCONTRACTING'
+WHEN PSTYP = '9'	THEN 'SERVICE'          END TIPO_LINHA
+,EKPO.MATNR	MATERIAL
+,EKPO.TXZ01	ITEM_DESCRIPTION
+
+,'' AS APROVAL_RELEASE_NOTES
+,'' AS APROVAL_PO_NOTES
+
+,try_cast(EKKO.LIFNR as varchar)            AS VENDOR_ID
+,LFA1.BRSCH                                 AS INDUSTRY_KEY
+--,TP.INDUSTRY_KEY_DESC                       AS INDUSTRY_KEY_DESC
+--,TP.INDUSTRY_KEY_CATEG                      AS INDUSTRY_KEY_CATEG
+--,LFA1.LAND1                                 AS VENDOR_COUNTRY
+--,''                                         AS VENDOR_CITY
+,CASE
+WHEN EKKO.ZTERM = 	'Z003'	THEN	60
+WHEN EKKO.ZTERM = 	'Z004'	THEN	90
+WHEN EKKO.ZTERM = 	'Z016'	THEN	58
+WHEN EKKO.ZTERM = 	'Z001'	THEN	30
+WHEN EKKO.ZTERM = 	'Z008'	THEN	0
+WHEN EKKO.ZTERM = 	'Z006'	THEN	10
+WHEN EKKO.ZTERM = 	'Z007'	THEN	14
+WHEN EKKO.ZTERM = 	'Z002'	THEN	45
+WHEN EKKO.ZTERM = 	'ST15'	THEN	60
+WHEN EKKO.ZTERM = 	'ZTBD'	THEN	0
+WHEN EKKO.ZTERM = 	'FAI3'	THEN	30
+WHEN EKKO.ZTERM = 	'Z037'	THEN	37
+WHEN EKKO.ZTERM = 	'Z029'	THEN	75
+WHEN EKKO.ZTERM = 	'Z005'	THEN	20
+WHEN EKKO.ZTERM = 	'Z009'	THEN	60
+WHEN EKKO.ZTERM = 	'ZADV'	THEN	0
+WHEN EKKO.ZTERM = 	'FAI4'	THEN	45
+WHEN EKKO.ZTERM = 	'Z028'	THEN	25
+WHEN EKKO.ZTERM = 	'Z011'	THEN	30
+WHEN EKKO.ZTERM = 	'Z026'	THEN	7
+WHEN EKKO.ZTERM = 	'Z610'	THEN	70
+WHEN EKKO.ZTERM = 	'Z910'	THEN	100
+WHEN EKKO.ZTERM = 	'Z027'	THEN	15
+WHEN EKKO.ZTERM = 	'Z065'	THEN	120
+WHEN EKKO.ZTERM = 	'FAI6'	THEN	60
+WHEN EKKO.ZTERM = 	'Z020'	THEN	30
+WHEN EKKO.ZTERM = 	'ZS01'	THEN	0
+WHEN EKKO.ZTERM = 	'ZS76'	THEN	90
+WHEN EKKO.ZTERM = 	'Z030'	THEN	15
+WHEN EKKO.ZTERM = 	'Z063'	THEN	5
+WHEN EKKO.ZTERM = 	'ZS57'	THEN	60
+WHEN EKKO.ZTERM = 	'ST18'	THEN	60
+WHEN EKKO.ZTERM = 	'ZK45'	THEN	45
+WHEN EKKO.ZTERM = 	'ZDA8'	THEN	30
+WHEN EKKO.ZTERM = 	'Z013'	THEN	0
+WHEN EKKO.ZTERM = 	'ZS25'	THEN	42
+WHEN EKKO.ZTERM = 	'Z450'	THEN	45
+WHEN EKKO.ZTERM = 	'ZPOR'	THEN	0
+ELSE 0                       END 	AS  TERMS_NUM
+,EKKO.ZTERM                         AS TERMS_DESCR
+,TRY_TO_DATE(EKPO.CREATIONDATE , 'YYYYMMDD') 	DATA_CRIACAO_LINHA
+,TRY_TO_DATE(EKPO.CREATIONDATE , 'YYYYMMDD') 	DATA_CRIACAO_PO
+,TRY_TO_DATE(EKPO.CREATIONDATE , 'YYYYMMDD') 	DATA_CRIACAO_ENTREGA
+,0                                              PRAZO_ENTREGA_LINHA
+,TRY_TO_DATE(EKPO.CREATIONDATE , 'YYYYMMDD') 	APPROVED_DATE
+
+,            EKET.EINDT                         DATA_PROMESSA_ENTREGA_FORN
+
+,    EKPO.BPRME UNIDADE_MEDIDA
+,    EKPO.NETPR PRECO_UNITARIO_PO
+,    EKPO.MENGE QUANTIDADE_PO
+,    EKPO.NETWR QUANTIA
+,    EKKO.WAERS MOEDA
+,CASE WHEN EKKO.WAERS = 'BRL' THEN 'LOCAL' ELSE 'INTERNACIONAL' END AS ORIGEM
+,CASE WHEN EKPO.erekz = 'X' THEN 'CLOSED' ELSE 'OPEN' END   STATUS
+--
+--
+,EKPO.ZZPRCCOMPTYPE			        TIPO_SAVING
+,try_to_decimal(EKPO.ZZREFPRICE)    PRECO_COMPARACAO
+,EKPO.ZZREFPRICECURR		        MOEDA_COMPARACAO
+,EKPO.ZZREFINFO				        INF_DO_SAVING
+--
+,CASE        WHEN PRPS.POSKI IS NULL THEN EKKN.KOSTL ELSE  PRPS.POSKI END  AS 							PROJETO_2
+--
+
+,'0'                                                                        AS	GL_CONTA
+,CASE        WHEN PRPS.POSKI IS NULL THEN EKKN.KOSTL ELSE  PRPS.POSKI END   AS	GL_PROJETO
+,'0'                                                                        AS	GL_SEGMENTO
+,'0'                                                                        AS	GL_WBS
+,'0'                                                                        AS	GL_CBS1
+,'0'                                                                        AS	GL_CBS2
+,'0'                                                                        AS	GL_VAGO1
+,'0'                                                                        AS	GL_VAGO2
+,'0'                                                                        AS	CODE_COMBINATION_ID
+,'0'                                                                        AS	ACCOUNT_TYPE
+,'0'                                                                        AS	MDM_GLOBAL_PROJECT
+
+,'0'                                                                       AS LINE_TIPO_COMPRA
+,'0'                                                                       AS LINE_WBS
+,'0'                                                                       AS LINE_ABS
+,'0'                                                                       AS LINE_CBS2
+,'0'                                                                       AS LINE_CBS1
+
+,'0'                                                                       AS lINE_PMR
+
+,'0'                                                                        AS PO_IPI_TAX
+,'0'                                                                        AS PO_IPI_TAX_AMOUNT
+,'0'                                                                        AS PO_ISS_TAX
+,'0'                                                                        AS PO_ISS_TAX_AMOUNT
+,'0'                                                                        AS ICMS_ST_TAX_AMOUNT
+,'0'                                                                        AS IPI_TAX_TOTAL_AMOUNT
+,'0'                                                                        AS ISS_TAX_TOTAL_AMOUNT
+,'0'                                                                        AS ICMS_ST_TAX_TOTAL_AMOUNT
+
+,CASE        WHEN PRPS.POSKI IS NULL THEN EKKN.KOSTL ELSE  PRPS.POSKI END   AS	PMR
+
+
+, NVL(EKBE_GR.GR_QUANT_IN       ,'0')
+, NVL(EKBE_INV.INV_QUANT_IN     ,'0')
+, NVL(EKBE_INV.INV_AMOUNT_CUR_PO,'0')
+, NVL(EKBE_GR.GR_AMOUNT_CUR_PO  ,'0')
+, EKBE_GR.GR_MAX_POST_DATE
+, EKBE_INV.INV_MAX_POST_DATE
+
+
+
+,GR_AMOUNT_CUR_PO                                                                                                                 REALIZE_QUANTIA_CUR_PO_GR
+
+,EKPO.NETWR - GR_AMOUNT_CUR_PO                                                                                                    AMOUT_OPEN_PO_GR
+
+,INV_AMOUNT_CUR_PO                                                                                                                REALIZE_QUANTIA_CUR_PO_INV
+
+,EKPO.NETWR - INV_AMOUNT_CUR_PO                                                                                                   AMOUT_OPEN_PO_INV
+
+FROM IDSPROD.RPL_SAP.EKKO EKKO -- PO
+JOIN IDSPROD.RPL_SAP.EKPO EKPO ON EKKO.EBELN = EKPO.EBELN -- LINE ON
+JOIN IDSPROD.RPL_SAP.LFA1 LFA1 ON EKKO.LIFNR = LFA1.LIFNR -- VENDOR
+
+LEFT JOIN IDSPROD.RPL_SAP.EKKN EKKN ON EKPO.EBELN = EKKN.EBELN and EKPO.EBELP = EKKN.EBELP  -- WBS ON
+LEFT JOIN IDSPROD.RPL_SAP.PRPS PRPS ON EKKN.PS_PSP_PNR = PRPS.PSPNR
+
+LEFT JOIN  (SELECT DISTINCT TVZBT.ZTERM AS ZTERM ,TVZBT.VTEXT AS VTEXT FROM IDSPROD.RPL_SAP.TVZBT AS TVZBT WHERE SPRAS = 'E') AS TVZBT ON EKKO.ZTERM = TVZBT.ZTERM
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+LEFT JOIN  (SELECT DISTINCT-- FOR GR
+ EKBE.EBELN
+,EKBE.EBELP
+,SUM(CASE WHEN EKBE.SHKZG    = 'H' THEN EKBE.WRBTR * (-1) ELSE EKBE.WRBTR END) GR_AMOUNT_CUR_PO
+,SUM(CASE WHEN EKBE.SHKZG    = 'H' THEN EKBE.DMBTR * (-1) ELSE EKBE.DMBTR END) GR_AMOUNT_CUR_BRL
+,SUM(CASE WHEN EKBE.SHKZG    = 'H' THEN EKBE.MENGE * (-1) ELSE EKBE.MENGE END) GR_QUANT_IN
+,MAX(TRY_TO_DATE(EKBE.CPUDT, 'YYYYMMDD'))                                      GR_MAX_POST_DATE
+FROM    IDSPROD.RPL_SAP.EKBE EKBE
+where  EKBE.BEWTP   =   'Q' -- Q FOR GR AND E FOR INVOICED
+   GROUP BY
+ EKBE.EBELN
+,EKBE.EBELP
+) EKBE_GR    ON  EKPO.EBELN = EKBE_GR.EBELN and EKPO.EBELP = EKBE_GR.EBELP
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LEFT JOIN  (SELECT DISTINCT-- FOR INV
+ EKBE.EBELN
+,EKBE.EBELP
+,SUM(CASE WHEN EKBE.SHKZG    = 'H' THEN EKBE.WRBTR * (-1) ELSE EKBE.WRBTR END) INV_AMOUNT_CUR_PO
+,SUM(CASE WHEN EKBE.SHKZG    = 'H' THEN EKBE.DMBTR * (-1) ELSE EKBE.DMBTR END) INV_AMOUNT_CUR_BRL
+,SUM(CASE WHEN EKBE.SHKZG    = 'H' THEN EKBE.MENGE * (-1) ELSE EKBE.MENGE END) INV_QUANT_IN
+,MAX(TRY_TO_DATE(EKBE.CPUDT, 'YYYYMMDD'))                                      INV_MAX_POST_DATE
+from    IDSPROD.RPL_SAP.EKBE EKBE
+where   EKBE.BEWTP                  =   'E' -- Q FOR GR AND E FOR INVOICED
+GROUP BY
+ EKBE.EBELN
+,EKBE.EBELP
+) EKBE_INV  on  EKPO.EBELN = EKBE_INV.EBELN and EKPO.EBELP = EKBE_INV.EBELP
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+LEFT JOIN  (SELECT DISTINCT EKET.EBELN ,EKET.EBELP ,TRY_TO_DATE(MAX(EKET.EINDT), 'YYYYMMDD') EINDT, TRY_TO_DATE(MAX(EKET.SLFDT), 'YYYYMMDD') SLFDT FROM IDSPROD.RPL_SAP.EKET EKET GROUP BY EKET.EBELN ,EKET.EBELP) EKET --INICIALMENTE PARA TRAZER DELIVERY DATE
+ON  EKPO.EBELN = EKET.EBELN and EKPO.EBELP = EKET.EBELP
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  --LEFT JOIN (SELECT DISTINCT
+  --                 CAST(TP.TP_ID AS VARCHAR)                 AS TP_ID
+  --            ,MAX(TP.USAGE_TYPE                  )          AS USAGE_TYPE
+  --            ,MAX(TP.SUPPLIERS_EL_INDUSTRY_KEY_00)          AS INDUSTRY_KEY
+  --            ,MAX(IK.label)                                 AS INDUSTRY_KEY_DESC
+  --            ,MAX(CT.label)                                 AS INDUSTRY_KEY_CATEG
+  --            ,MAX(TP.ADDRESS_ELEMS_COUNTRY_CODE  )          AS VENDOR_COUNTRY
+  --            ,MAX(TP.CITY_NAME                   )          AS VENDOR_CITY
+  --            FROM IDSPROD.RPL_MDM.EBX_HG_THIRD_PARTY        AS TP
+  --       LEFT JOIN IDSPROD.RPL_MDM.EBX_INDUSTRY_KEY          AS IK ON TP.SUPPLIERS_EL_INDUSTRY_KEY_00 = IK.ID
+  --       LEFT JOIN IDSPROD.RPL_MDM.EBX_INDUSTRY_KEY_CATEGORY AS CT ON IK.CATEGORY_                    = CT.ID
+  --            GROUP BY  TP.TP_ID)                            AS TP  ON LFA1.BRSCH   = TP.TP_ID
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+WHERE
+
+    EKPO.LOEKZ <> 'L'               --  'X' when deleted,  'L' when blocked.
+and EKKO.BSART IN ('NB','ZNB1')      -- TIPO DE PO
+and EKKO.BUKRS in ('EWBO','ESPB','MBDOR')
+and ( EKPO.CREATIONDATE LIKE '%2018%' or EKPO.CREATIONDATE LIKE '%2019%' or EKPO.CREATIONDATE LIKE '%2020%' or EKPO.CREATIONDATE LIKE '%2021%' or EKPO.CREATIONDATE LIKE '%2022%' or EKPO.CREATIONDATE LIKE '%2023%' or EKPO.CREATIONDATE LIKE '%2024%'  or EKPO.CREATIONDATE LIKE '%2025%' )
+--    EKKO.EBELN  like '%4500525037%'
+--and EKPO.EBELP     = '000010'
+)
+--where PO_NUM LIKE '%341377%'-- AND NUM_RELEASE LIKE '%441%'
