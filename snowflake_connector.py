@@ -5,7 +5,14 @@ import time
 
 
 def snowflake_lookup(
-    account, warehouse, user, authenticator, role, schema, database_name, file_path
+    account,
+    warehouse,
+    user,
+    authenticator,
+    role,
+    schema,
+    database_name,
+    file_path,
 ):
     start_time = time.time()  # Record the start time
 
@@ -46,15 +53,23 @@ def snowflake_lookup(
 
 account = "technipfmc-data"
 warehouse = "reporting_wh"
-user = "maria.mourao@technipfmc.com"
+user = "pedro.franca@technipfmc.com"
 authenticator = "externalbrowser"
 role = "REPORTING"
 schema = "PUBLIC"
 database_name = "IDSDEV"
-file_path = "pcc_query_PO.txt"
+file_path = "pcc_query.txt"
 
 
 df = snowflake_lookup(
-    account, warehouse, user, authenticator, role, schema, database_name, file_path
+    account,
+    warehouse,
+    user,
+    authenticator,
+    role,
+    schema,
+    database_name,
+    file_path,
 )
+
 print(df)
